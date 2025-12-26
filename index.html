@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DarkWeb Hub v3 | WeBug + Download + Games</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="neon-logo">⚡ DARKWEB HUB v3</div>
+            <div class="subtitle">WeBug • DER Download • Mini Games</div>
+            
+            <div class="login-form">
+                <input type="text" id="username" placeholder="Username" class="input-field">
+                <input type="password" id="password" placeholder="Password" class="input-field">
+                <button onclick="attemptLogin()" class="login-btn">LOGIN</button>
+                
+                <div class="divider">ATAU</div>
+                
+                <div class="access-request">
+                    <h3>📨 REQUEST ACCESS</h3>
+                    <input type="email" id="reqEmail" placeholder="Email kamu" class="input-field">
+                    <input type="text" id="reqReason" placeholder="Alasan request" class="input-field">
+                    <textarea id="reqMessage" placeholder="Pesan ke admin..." class="textarea-field"></textarea>
+                    <button onclick="sendAccessRequest()" class="request-btn">KIRIM REQUEST KE ADMIN</button>
+                    <p class="note">Admin akan mengirim credentials via email setelah approve</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden until login) -->
+    <div id="dashboard" class="screen">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+                <span class="app-title">DarkWeb Hub v3</span>
+            </div>
+            <div class="header-right">
+                <span id="userStatus" class="user-status">👤 Guest</span>
+                <button onclick="logout()" class="logout-btn">LOGOUT</button>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-menu">
+                <div class="menu-item active" onclick="showSection('home')">
+                    <span>🏠</span> Dashboard
+                </div>
+                <div class="menu-item" onclick="showSection('webug')">
+                    <span>🐛</span> WeBug Tools
+                </div>
+                <div class="menu-item" onclick="showSection('download')">
+                    <span>📥</span> DER Downloader
+                </div>
+                <div class="menu-item" onclick="showSection('games')">
+                    <span>🎮</span> Games Zone
+                </div>
+                <div class="menu-item" onclick="showSection('admin')">
+                    <span>🔧</span> Admin Panel
+                </div>
+                <div class="menu-item" onclick="showSection('settings')">
+                    <span>⚙️</span> Settings
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section id="homeSection" class="content-section active">
+                <h2>🚀 Welcome to DarkWeb Hub</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>WeBug Tools</h3>
+                        <p>Network scanner, port checker, vulnerability tester</p>
+                        <button onclick="showSection('webug')" class="action-btn">OPEN</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3>DER Downloader</h3>
+                        <p>Direct download manager dengan resume support</p>
+                        <button onclick="showSection('download')" class="action-btn">OPEN</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Games Zone</h3>
+                        <p>3 Mobile-optimized games: Snake, Tetris, 2048</p>
+                        <button onclick="showSection('games')" class="action-btn">PLAY</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WeBug Tools Section -->
+            <section id="webugSection" class="content-section">
+                <h2>🐛 WeBug Security Tools</h2>
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <h3>🌐 Network Scanner</h3>
+                        <input type="text" id="scanTarget" placeholder="IP/URL target" class="input-field">
+                        <button onclick="startScan()" class="tool-btn">START SCAN</button>
+                        <div id="scanResults" class="results"></div>
+                    </div>
+                    <div class="tool-card">
+                        <h3>🚪 Port Checker</h3>
+                        <input type="text" id="portTarget" placeholder="IP target" class="input-field">
+                        <input type="text" id="portRange" placeholder="Port range (1-1000)" class="input-field">
+                        <button onclick="checkPorts()" class="tool-btn">CHECK PORTS</button>
+                        <div id="portResults" class="results"></div>
+                    </div>
+                    <div class="tool-card">
+                        <h3>🔓 Vulnerability Tester</h3>
+                        <select id="vulnType" class="select-field">
+                            <option value="sql">SQL Injection</option>
+                            <option value="xss">XSS</option>
+                            <option value="csrf">CSRF</option>
+                        </select>
+                        <input type="text" id="vulnTarget" placeholder="Target URL" class="input-field">
+                        <button onclick="testVulnerability()" class="tool-btn">TEST</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DER Downloader Section -->
+            <section id="downloadSection" class="content-section">
+                <h2>📥 DER Download Manager</h2>
+                <div class="download-interface">
+                    <div class="url-input">
+                        <input type="text" id="downloadUrl" placeholder="Masukkan URL file" class="input-field">
+                        <button onclick="addDownload()" class="download-btn">➕ ADD DOWNLOAD</button>
+                    </div>
+                    <div class="download-list">
+                        <h3>📋 Active Downloads</h3>
+                        <table id="downloadTable">
+                            <thead>
+                                <tr>
+                                    <th>File</th>
+                                    <th>Progress</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Downloads will appear here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Games Section -->
+            <section id="gamesSection" class="content-section">
+                <h2>🎮 Games Zone</h2>
+                <div class="games-grid">
+                    <div class="game-card" onclick="loadGame('snake')">
+                        <div class="game-icon">🐍</div>
+                        <h3>Snake Game</h3>
+                        <p>Classic snake game mobile optimized</p>
+                    </div>
+                    <div class="game-card" onclick="loadGame('tetris')">
+                        <div class="game-icon">🧊</div>
+                        <h3>Tetris</h3>
+                        <p>Block stacking puzzle game</p>
+                    </div>
+                    <div class="game-card" onclick="loadGame('2048')">
+                        <div class="game-icon">🔢</div>
+                        <h3>2048 Puzzle</h3>
+                        <p>Merge numbers to reach 2048</p>
+                    </div>
+                </div>
+                <div id="gameContainer" class="game-container">
+                    <!-- Games will load here -->
+                </div>
+            </section>
+
+            <!-- Admin Panel Section -->
+            <section id="adminSection" class="content-section">
+                <h2>🔧 Admin Control Panel</h2>
+                <div class="admin-panel">
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" onclick="showAdminTab('requests')">Access Requests</button>
+                        <button class="admin-tab" onclick="showAdminTab('users')">User Management</button>
+                        <button class="admin-tab" onclick="showAdminTab('logs')">System Logs</button>
+                    </div>
+                    
+                    <div id="requestsTab" class="admin-tab-content active">
+                        <h3>📨 Pending Access Requests</h3>
+                        <div id="requestList" class="request-list">
+                            <!-- Requests will appear here -->
+                        </div>
+                    </div>
+                    
+                    <div id="usersTab" class="admin-tab-content">
+                        <h3>👥 Registered Users</h3>
+                        <table class="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Access Level</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTable">
+                                <!-- Users will appear here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification System -->
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
